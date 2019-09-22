@@ -1,0 +1,28 @@
+.index_swiper swiper {
+  height: 340rpx;
+}
+.index_nav {
+  display: flex;
+}
+.index_nav navigator {
+  flex: 1;
+  padding: 20rpx;
+}
+.index_floor .floor_group .floor_content navigator {
+  padding: 10rpx;
+  float: left;
+  width: 33.33%;
+}
+.index_floor .floor_group .floor_content navigator:nth-last-child(-n+4) {
+  padding-left: 0;
+  height: 202.5862069rpx;
+}
+.index_floor .floor_group .floor_content navigator:nth-last-child(-n+4) image {
+  height: 100%;
+}
+.index_floor .floor_group .floor_content navigator:nth-last-child(4) {
+  padding-bottom: 0;
+}
+.index_floor .floor_group .floor_content navigator:nth-last-child(3) {
+  padding-bottom: 0;
+}

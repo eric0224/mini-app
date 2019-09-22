@@ -1,0 +1,43 @@
+// 轮播图开始
+.index_swiper {
+    swiper {
+        height: 340rpx;
+    }
+}
+
+//   导航栏
+.index_nav {
+    display: flex;
+    navigator {
+        flex: 1;
+        padding: 20rpx;
+    }
+}
+
+// 楼层
+.index_floor {
+    .floor_group {
+      .floor_title {
+      }
+      .floor_content {
+        navigator{
+          padding: 10rpx;
+          float: left;
+          width: 33.33%; 
+          &:nth-last-child(-n+4){
+            padding-left:0; 
+              height: 750rpx/3*376/232/2;
+              image{
+                  height: 100%;
+              }
+          }
+          &:nth-last-child(4){
+            padding-bottom: 0;
+          }
+          &:nth-last-child(3){
+            padding-bottom: 0;
+          }
+        }
+      }
+    }
+  }
