@@ -5,62 +5,37 @@ Page({
    * 页面的初始数据
    */
   data: {
-
+    currentIndex:0,
+    menuList:[],
+    goodsList:[]
   },
-
-  /**
-   * 生命周期函数--监听页面加载
-   */
-  onLoad: function (options) {
-
+  Cates:[],
+  onLoad(){
+    this.getCates()
   },
-
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady: function () {
-
+  getCates(){
+    wx.request({
+      url: 'https://api.zbztb.cn/api/public/v1/categories',
+      success: (res) => {
+        this.Cates=res.data.message
+        const menuList=this.Cates.map(v=>v.cat_name)
+        // console.log(this.menuList)
+        const goodsList=this.Cates[0].children
+        // console.log(goodsList)
+        this.setData({
+          menuList,
+          goodsList
+        })
+      }
+    });
+      
   },
-
-  /**
-   * 生命周期函数--监听页面显示
-   */
-  onShow: function () {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面隐藏
-   */
-  onHide: function () {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面卸载
-   */
-  onUnload: function () {
-
-  },
-
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
-  onPullDownRefresh: function () {
-
-  },
-
-  /**
-   * 页面上拉触底事件的处理函数
-   */
-  onReachBottom: function () {
-
-  },
-
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage: function () {
-
+  handleMenuTap(e){
+    const {index}=e.target.dataset
+    const goodsList=this.Cates[index].children
+    this.setData({
+      currentIndex:index,
+      goodsList
+    })
   }
 })

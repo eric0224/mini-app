@@ -1,1 +1,44 @@
-/* pages/category/index.wxss */
+.category_index {
+  height: calc(100vh - 90rpx);
+  overflow: hidden;
+  display: flex;
+}
+.left_menu {
+  width: 160rpx;
+  overflow: scroll;
+}
+.left_menu .menu_item {
+  height: 80rpx;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 30rpx;
+}
+.left_menu .active {
+  color: var(--themeColor);
+  border-left: 3rpx solid currentColor;
+}
+.right_data {
+  flex: 1;
+}
+.right_data .goods_list .goods_list_title {
+  height: 80rpx;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 30rpx;
+}
+.right_data .goods_list .goods_list_title .list_title {
+  margin: 0 20rpx;
+}
+.right_data .goods_list .goods_list_content {
+  display: flex;
+  flex-wrap: wrap;
+}
+.right_data .goods_list .goods_list_content .goods_item {
+  width: 33.33%;
+  text-align: center;
+}
+.right_data .goods_list .goods_list_content .goods_item image {
+  width: 60%;
+}
