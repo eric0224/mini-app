@@ -1,4 +1,5 @@
 // pages/category/index.js
+import {request} from "../../request/index.js"
 Page({
 
   /**
@@ -34,10 +35,10 @@ Page({
       
   },
   getCates(){
-    wx.request({
-      url: 'https://api.zbztb.cn/api/public/v1/categories',
-      success: (res) => {
-        this.Cates=res.data.message
+    request({
+      url:'/categories'
+    }).then(res=>{
+      this.Cates=res.data.message
         const menuList=this.Cates.map(v=>v.cat_name)
         // console.log(this.menuList)
         const goodsList=this.Cates[0].children
@@ -47,9 +48,7 @@ Page({
           menuList,
           goodsList
         })
-      }
-    });
-      
+    })
   },
   handleMenuTap(e){
     const {index}=e.target.dataset

@@ -1,50 +1,45 @@
-
+import {
+    request
+} from "../../request/index.js"
 Page({
-    data:{
-        swiperdata:[],
-        catitemsList:[],
-        floordata:[]
+    data: {
+        swiperdata: [],
+        catitemsList: [],
+        floordata: []
     },
-    onLoad(){
+    onLoad() {
         this.getSwiperData(),
-        this.getCatitems(),
-        this.getfloorList()
+            this.getCatitems(),
+            this.getfloorList()
     },
     // 获取轮播图数据
-    getSwiperData(){
-        wx.request({
-            url:'https://api.zbztb.cn/api/public/v1/home/swiperdata',
-            success:(res)=>{
-                // console.log(res)
-                this.setData({
-                    swiperdata:res.data.message
-                })
-            }
+    getSwiperData() {
+        request({
+            url: '/home/swiperdata',
+        }).then(res => {
+            this.setData({
+                swiperdata: res.data.message
+            })
         })
     },
     // 获取导航栏
-    getCatitems(){
-        wx.request({
-            url: 'https://api.zbztb.cn/api/public/v1/home/catitems',
-            success: (res) => {
-                // console.log(res)
-                this.setData({
-                    catitemsList:res.data.message
-                })
-            }
-        });   
+    getCatitems() {
+        request({
+            url: '/home/catitems',
+        }).then(res => {
+            this.setData({
+                catitemsList: res.data.message
+            })
+        })
     },
     // 获取楼层数据
-    getfloorList(){
-        wx.request({
-            url: 'https://api.zbztb.cn/api/public/v1/home/floordata',
-            success: (res) => {
-                // console.log(res)
-                this.setData({
-                    floordata:res.data.message
-                })
-            }
-        });
-          
+    getfloorList() {
+        request({
+            url: '/home/floordata',
+        }).then(res => {
+            this.setData({
+                floordata: res.data.message
+            })
+        })
     }
 })
