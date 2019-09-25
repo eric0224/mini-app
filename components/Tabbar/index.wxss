@@ -1,0 +1,16 @@
+.tabbar_title {
+  display: flex;
+  height: 90rpx;
+}
+.tabbar_title .title_item {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 30rpx;
+  border-bottom: 1rpx solid #d9d9d9;
+}
+.tabbar_title .active {
+  color: var(--themeColor);
+  border-bottom: 1rpx solid currentColor;
+}

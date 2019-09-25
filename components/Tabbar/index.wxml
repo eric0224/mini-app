@@ -1,0 +1,15 @@
+<view class="tabbar">
+    <view class="tabbar_title">
+        <view class="title_item {{currentIndex===index?'active':''}}"
+        wx:for="{{tabbarData}}"
+        wx:key="id"
+        data-index="{{index}}"
+        bindtap="handleTap"
+        >
+            {{item.text}}
+        </view>
+    </view>
+    <view class="tabbar_content">
+        <slot></slot>
+    </view>
+</view>

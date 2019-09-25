@@ -1,66 +1,84 @@
-// pages/goods_list/index.js
+import {request} from "../../request/index.js"
 Page({
 
   /**
    * 页面的初始数据
    */
   data: {
+    tabbarData:[
+      {id:0,text:"综合"},
+      {id:1,text:"销量"},
+      {id:2,text:"价格"}
+    ],
+    currentIndex:0,
+    goodsList:[]
+  },
+  // 请求参数
+  QueryParams:{
+    query:"",
+    cid:"",
+    pagenum:1,
+    pagesize:10
+  },
+  // 总页数
+  TotalPages:1,
+  handleitemChange(e){
+    // console.log(e)
+    this.setData({
+      currentIndex:e.detail.index
+    })
+  },
+  onLoad(options){
+    // console.log(options)
+    const {cid}=options
+    this.QueryParams.cid=cid
+    this.getGoodsList()
+  },
+  // 获取商品列表数据
+  getGoodsList(){
+    request({
+      url:"/goods/search",
+      data:this.QueryParams
+    }).then(res=>{
+      // console.log(res)
+      // 接口返回新数组
+      const newGoodsList=res.data.message.goods;
+      // 旧数组
+      const beforeGoodsList=this.data.goodsList;
+      const total=res.data.message.total;
+      // 计算总页数
+      this.TotalPages=Math.ceil(total/this.QueryParams.pagesize)
+      this.setData({
+        goodsList:[...newGoodsList,...beforeGoodsList]
+      })
+    })
 
+    // 关闭下拉刷新事件
+    wx.stopPullDownRefresh()
   },
 
-  /**
-   * 生命周期函数--监听页面加载
-   */
-  onLoad: function (options) {
-    console.log(options)
+  // 滚动条触底事件
+  onReachBottom(){
+    if(this.QueryParams.pagenum>=this.TotalPages){
+      wx.showToast({
+        title: '不要再滑动了',
+        icon: 'none'
+      });
+      this.setData({
+        isNoMore:true
+      })  
+    }else{
+      this.QueryParams.pagenum++;
+      this.getGoodsList();
+    }
   },
 
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady: function () {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面显示
-   */
-  onShow: function () {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面隐藏
-   */
-  onHide: function () {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面卸载
-   */
-  onUnload: function () {
-
-  },
-
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
-  onPullDownRefresh: function () {
-
-  },
-
-  /**
-   * 页面上拉触底事件的处理函数
-   */
-  onReachBottom: function () {
-
-  },
-
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage: function () {
-
+  // 页面下拉刷新事件
+  onPullDownRefresh(){
+    this.QueryParams.pagenum=1;
+    this.setData({
+      goodsList:[]
+    })
+    this.getGoodsList();
   }
 })
