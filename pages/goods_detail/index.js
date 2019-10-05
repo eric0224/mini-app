@@ -49,7 +49,8 @@ Page({
         goods_name: goodsObj.goods_name,
         goods_price: goodsObj.goods_price,
         goods_small_logo: goodsObj.goods_small_logo,
-        num: 1
+        num: 1,
+        checked:true
       })
     } else {
       cartList[index].num++;

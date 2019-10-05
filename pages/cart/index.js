@@ -1,66 +1,160 @@
+import {
+  getSetting,
+  openSetting,
+  chooseAddress,
+  showModal,
+  showToast
+} from "../../request/index.js"
+import regeneratorRuntime from "../../lib/runtime/runtime.js"
+
 // pages/cart/index.js
 Page({
-
-  /**
-   * 页面的初始数据
-   */
   data: {
+    address: {},
+    carts: [],
+    allChecked: false,
+    totalNum: 0,
+    totalPrice: 0
+  },
+  onShow() {
+    const address = wx.getStorageSync("address");
+    const carts = wx.getStorageSync("carts");
+    this.setData({
+      address,
+      carts
+    });
+    this.countData(carts)
+  },
+  handleChooseAddress() {
+    this.getUserAddress();
+    // wx.getSetting({
+    //   success: (res) => {
+    //     const auth=res.authSetting["scope.address"];
+    //     if(auth===false){
+    //       wx.openSetting({
+    //         success: (res) => {
+    //           wx.chooseAddress({
+    //             success: (res) => {
+
+    //             }
+    //           });
+    //         }
+    //       });
+
+    //     }else{
+    //       wx.chooseAddress({
+    //         success: (res) => {
+
+    //         }
+    //       });
+
+    //     }
+    //   }
+    // });
 
   },
-
-  /**
-   * 生命周期函数--监听页面加载
-   */
-  onLoad: function (options) {
-
+  // 获取用户的收货地址
+  async getUserAddress() {
+    const res = await getSetting();
+    const auth = res.authSetting["scope.address"];
+    if (auth === false) {
+      await openSetting();
+    }
+    const res1 = await chooseAddress()
+    res1.detailAddress = res1.provinceName + res1.cityName + res1.countyName + res1.detailInfo
+    this.setData({
+      address: res1
+    })
+    wx.setStorageSync("address", res1);
   },
-
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady: function () {
-
+  // 计算数据
+  countData(carts) {
+    let allChecked = true;
+    let totalNum = 0;
+    let totalPrice = 0;
+    carts.forEach((v, i) => {
+      if (v.checked) {
+        totalPrice += v.num * v.goods_price;
+        totalNum += v.num
+      } else {
+        allChecked = false;
+      }
+    });
+    allChecked = carts.length === 0 ? false : allChecked;
+    this.setData({
+      allChecked,
+      totalNum,
+      totalPrice
+    })
   },
-
-  /**
-   * 生命周期函数--监听页面显示
-   */
-  onShow: function () {
-
+  //  商品的单选功能
+  handleItemChange(e) {
+    const {
+      index
+    } = e.target.dataset;
+    let {
+      carts
+    } = this.data;
+    carts[index].checked = !carts[index].checked;
+    this.setData({
+      carts
+    })
+    wx.setStorageSync("carts", carts);
+    this.countData(carts)
   },
-
-  /**
-   * 生命周期函数--监听页面隐藏
-   */
-  onHide: function () {
-
+  //  商品的数量编辑
+  async handleNumUpdate(e) {
+    const {
+      operation,
+      index
+    } = e.target.dataset;
+    let {
+      carts
+    } = this.data;
+    if (operation === -1 && carts[index].num === 1) {
+      const res = await showModal({
+        title: "警告",
+        content: "您确定要删除吗?"
+      })
+      if (res) {
+        carts.splice(index, 1)
+      } else {
+        return;
+      }
+    } else {
+      carts[index].num += operation;
+    }
+    this.setData({
+      carts
+    })
+    wx.setStorageSync("carts", carts);
+    this.countData(carts)
   },
-
-  /**
-   * 生命周期函数--监听页面卸载
-   */
-  onUnload: function () {
-
-  },
-
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
-  onPullDownRefresh: function () {
-
-  },
-
-  /**
-   * 页面上拉触底事件的处理函数
-   */
-  onReachBottom: function () {
-
-  },
-
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage: function () {
-
+  // 结算按钮的点击事件
+  async handleOrderPay() {
+    const {
+      totalNum,
+      address
+    } = this.data
+    if (totalNum === 0) {
+      await showToast({
+        title: "您还没有选购商品",
+        icon: 'none',
+        mask: true
+      })
+      return;
+    }
+    if (address === "") {
+      await showToast({
+        title: "请选择收货地址",
+        icon: 'none',
+        mask: true
+      })
+      return;
+    }
+    wx.navigateTo({
+      url: '/pages/pay/index'
+    });
+      
   }
 })
