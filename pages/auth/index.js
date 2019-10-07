@@ -1,66 +1,29 @@
 // pages/auth/index.js
+import {
+  login,request
+} from "../../request/index.js"
+import regeneratorRuntime from "../../lib/runtime/runtime.js"
 Page({
-
-  /**
-   * 页面的初始数据
-   */
-  data: {
-
+  handleGetuserinfo(e){
+    this.wxLogin(e);  
   },
-
-  /**
-   * 生命周期函数--监听页面加载
-   */
-  onLoad: function (options) {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady: function () {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面显示
-   */
-  onShow: function () {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面隐藏
-   */
-  onHide: function () {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面卸载
-   */
-  onUnload: function () {
-
-  },
-
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
-  onPullDownRefresh: function () {
-
-  },
-
-  /**
-   * 页面上拉触底事件的处理函数
-   */
-  onReachBottom: function () {
-
-  },
-
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage: function () {
-
+//wx4f072b3aff1ad4a3
+  // 执行微信登陆
+  async wxLogin(e){
+    const {code}=await login();
+    const {encryptedData,rawData,iv,signature}=e.detail;
+    const tokenParam={
+      code,encryptedData,rawData,iv,signature
+    };
+    const res=await request({url:"/users/wxlogin",method:"post",data:tokenParam})
+    // console.log(res)
+    wx.setStorageSync("token", res.token);
+    wx.navigateBack({
+      // 返回上一页
+      delta: 1
+    });
+      
+      
   }
+
 })

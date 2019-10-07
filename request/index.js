@@ -3,12 +3,26 @@
  * @param {object} params 请求的参数
  */
 export const request=(params)=>{
+    // 判断要不要带token
+    let header={...params.header};
+    if(params.url.includes("/my/")){
+        header["Authorization"]=wx.getStorageSync("token");
+          
+    }
+    // 发送了几次 被递增几个
+    requestTimes++;
+    wx.showLoading({
+        title: "加载中",
+        mask: true
+    });
+      
     // 公共的url
     const baseUrl="https://api.zbztb.cn/api/public/v1"
     return new Promise((resolve,reject)=>{
         wx.request({
             ...params,
             url: baseUrl+params.url,
+            header,
             success: (result) => {
                 resolve(result)
             },
@@ -86,5 +100,40 @@ export const showToast=(params)=>{
                 resolve(res);
             }
         });  
+    })
+}
+
+export const login=(params)=>{
+    return new Promise((resolve,reject)=>{
+        wx.login({
+            timeout:10000,
+            success: (res) => {
+                resolve(res)
+            },
+            fail: (err) => {
+                reject(err)
+            }
+        });
+            
+    })
+}
+
+/**
+ * 发起微信支付的API
+ * @param {object} pay 支付参数
+ */
+export const requestPayment=(pay)=>{
+    return new Promise((resolve,reject)=>{
+       wx.requestPayment({
+           ...pay,
+           success: (res) => {
+            resolve(res)
+           },
+           fail: (err) => {
+            reject(err) 
+           }
+       });
+         
+            
     })
 }
