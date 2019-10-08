@@ -24,8 +24,8 @@
         <view class="detail_name_wrap">
             {{goodsObj.goods_name}}
         </view>
-        <view class="detail_name_collect">
-            <text class="iconfont icon-shoucang"></text>
+        <view class="detail_name_collect" bindtap="handleCartAdd">
+            <text class="iconfont {{isCollect===true?'icon-shoucang1':'icon-shoucang'}}"></text>
             <view>
                 收藏
             </view> 
