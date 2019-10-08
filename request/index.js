@@ -10,11 +10,11 @@ export const request=(params)=>{
           
     }
     // 发送了几次 被递增几个
-    requestTimes++;
-    wx.showLoading({
-        title: "加载中",
-        mask: true
-    });
+    // requestTimes++;
+    // wx.showLoading({
+    //     title: "加载中",
+    //     mask: true
+    // });
       
     // 公共的url
     const baseUrl="https://api.zbztb.cn/api/public/v1"
